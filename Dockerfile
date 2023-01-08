@@ -1,13 +1,12 @@
 FROM node:19-alpine
-WORKDIR /innov_order
+WORKDIR /food_info
 COPY db.sql .
-RUN mkdir /innov_order/db \
+RUN mkdir /food_info/db \
     && apk --update-cache add sqlite \
-    && sqlite3 db/innov_db.db ".read db.sql"
-WORKDIR /innov_order/app
+    && sqlite3 db/food_info.db ".read db.sql"
+WORKDIR /food_info/app
 COPY app/ .
 RUN npm install
 EXPOSE 3000
 
 CMD ["npm", "start"]
-# CMD [ "sh" ]
