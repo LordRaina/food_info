@@ -46,19 +46,19 @@ The available endpoints are:
 ## Docker
 The application can also be run with [Docker](https://www.docker.com/). First you need to place yourself in the root directory and build the docker image with: 
 ```bash
-$ docker build -t food_fact 
+$ docker build -t food-info 
 ```
 Then you can start the docker container via:
 ```bash
-$ docker run -dp 3000:3000 food_fact
+$ docker run -dp 3000:3000 food-info
 ```
 If you want the data to be persisted, first create a volume:
 ```bash
-$ docker volume create food_fact
+$ docker volume create food-info
 ```
 and mount the volume with the container when starting it:
 ```bash
-docker run -dp 3000:3000 --mount type=volume,src=db,target=/food_info/db food_info
+docker run -dp 3000:3000 --mount type=volume,src=food-info,target=/food_info/db food-info
 ```
 This will mount the volume we just created with the previous command with the container's folder `/food_info/db`
 
@@ -67,7 +67,4 @@ This will mount the volume we just created with the previous command with the co
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
 ```
