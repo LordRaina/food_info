@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UsersService,
+        private usersService: UsersService,
         private jwtService: JwtService
     ) {}
 
@@ -19,7 +19,7 @@ export class AuthService {
      * @returns Promise that'll resolve and return either an user or null
      */
     async validateUser(login: string, password: string): Promise<any> {
-        const user = await this.userService.findOneByLogin(login);
+        const user = await this.usersService.findOneByLogin(login);
         // if user has been found, we compare password
         if (user && await bcrypt.compare(password, user.password)) {
             return user;
