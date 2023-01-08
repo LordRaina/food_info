@@ -1,49 +1,66 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Small API using the [NestJS](https://nestjs.com/) framework. This server allows the retrieval of food information based on their barcode through the [OpenFoodFact API](https://fr.openfoodfacts.org/data). 
+The main functionnalities are:
+- Registration of an user through a login/password combination
+- Authentication of an user through the same login/password combination
+- Retrieval of food product information linked to its barcode through a protected route
+
+Since this is a demo application, the [SQLite](https://www.sqlite.org/index.html) database was used for its simplicity.
 
 ## Installation
+### Database
+First of all the `sqlite3` package needs to be installed in order to create the database.
+Once the package is installed your system, run this:
+```bash
+$ mkdir /db
+$ sqlite3 db/food_info.db ".read db.sql"
+```
+This will create a `db` folder containing the `sqlite` database created through the `db.sql`
 
+### Application
+The [NodeJS](https://nodejs.org/en/) environment and [npm](https://docs.npmjs.com/) registry need to be installed.
+Go the `app` folder and simply run:
 ```bash
 $ npm install
 ```
+This will install all the necessary dependencies for the app.
+
 
 ## Running the app
-
+To start the application, simply run: 
 ```bash
-# development
-$ npm run start
-
-# watch mode
+$ npm start
+``` 
+or for development purposes with the [Hot Reload mechanism](https://docs.nestjs.com/recipes/hot-reload):
+```bash
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+
+The API will be listening on `localhost:3000`.
+The available endpoints are:
+- `POST /users` with a `{ "login": string, "password": string}` JSON body
+- `POST /auth/login` with `{ "login": string, "password": string}` JSON body
+- `GET /food-facts/{barcode}` where `{barcode}` is the barcode of the food product
+
+## Docker
+The application can also be run with [Docker](https://www.docker.com/). First you need to place yourself in the root directory and build the docker image with: 
+```bash
+$ docker build -t food_fact 
+```
+Then you can start the docker container via:
+```bash
+$ docker run -dp 3000:3000 food_fact
+```
+If you want the data to be persisted, first create a volume:
+```bash
+$ docker volume create food_fact
+```
+and mount the volume with the container when starting it:
+```bash
+docker run -dp 3000:3000 --mount type=volume,src=db,target=/food_info/db food_info
+```
+This will mount the volume we just created with the previous command with the container's folder `/food_info/db`
 
 ## Test
 
@@ -53,21 +70,4 @@ $ npm run test
 
 # e2e tests
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
