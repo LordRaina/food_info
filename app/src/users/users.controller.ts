@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpException, HttpStatus  } from '@nestjs/common';
+import { Controller,  Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ParsePasswordPipe } from './pipe/parse-password.pipe';
 import { UserError } from './users.exception';
 
@@ -30,15 +29,5 @@ export class UsersController {
             }
             throw error;
         };         
-    }
-    
-    @Get()
-    findAll() {
-        return this.usersService.findAll();
-    }
-
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.usersService.update(+id, updateUserDto);
     }
 }
