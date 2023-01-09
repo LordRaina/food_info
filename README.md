@@ -68,3 +68,25 @@ This will mount the volume we just created with the previous command with the co
 # unit tests
 $ npm run test
 ```
+
+## Kubernetes
+I've tried to use [Kubernetes](https://kubernetes.io/) for fun and re-learning purposes although this demo app won't 
+be deployed in a large scale (also using SQLite by storing data on a file isn't the best nor the smartest choice for such scenario).
+
+The `kubernetes.yaml` is a kubernetes config file that will handle the creation of one namespace (`food-info`) and three resources (a volume for the node, a pod and a service). In order to create the resources, run: 
+```bash
+$ kubectl apply -f kubernetes.yaml
+```
+
+There's a known bug with kubernetes and WSL2 with the `localhost`. In order to make it work on such system, we can manually forward the port by running:
+```bash
+# Get the name of the pod
+$ kubectl -n food-info get pod
+NAME                   READY   STATUS    RESTARTS   AGE
+app-57f9bc5967-b2t6p   1/1     Running   0          2m41s
+
+# port forwarding
+$ kubectl -n food-info port-forward app-57f9bc5967-b2t6p 3000:3000
+```
+
+You will be able to access the API through `localhost:3000`
